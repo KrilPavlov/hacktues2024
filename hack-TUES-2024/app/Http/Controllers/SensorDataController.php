@@ -8,7 +8,11 @@ use Illuminate\Http\Request;
 class SensorDataController extends Controller
 {
     public function index(Request $request){
-        dd($request->all());
+        // if($request){
+        //     return redirect()->route('welcome');
+        // }
+        // $data = new SensorData;
+        return $request->all();
     }
     public function show(){
         $data = SensorData::all();
