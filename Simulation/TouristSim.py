@@ -19,7 +19,7 @@ class Tourist():
         self.progress = 0
         self.start_pos = self.node_pos[self.start_node]
         self.cur_pos = self.node_pos[self.start_node]
-        self.end_pos = self.node_pos[self.end_pos]
+        self.end_pos = self.node_pos[self.end_node]
 
     def updatePosition(self, deltaTime):
 
@@ -27,15 +27,14 @@ class Tourist():
         x2, y2 = self.cur_pos
         x3, y3 = self.end_pos
     
-        # Calculate the distance between P1 and P2
-        D = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        D = math.sqrt((x3 - x2)**2 + (y3 - y2)**2)
         
         # Calculate total travel time from P1 to P2
         T = D / self.speed
     
         # Calculate current position at time t
-        x = x2 + (x3 - x2) * (deltaTime / T)
-        y = y2 + (y3 - y2) * (deltaTime / T)
+        x = x2 + ((x3 - x2) * (deltaTime / T))
+        y = y2 + ((y3 - y2) * (deltaTime / T))
 
         self.cur_pos = (x, y)
 
