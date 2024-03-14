@@ -1,7 +1,7 @@
 import requests
 
 # The URL you want to make a POST request to
-url = 'http://192.168.206.240'
+url = 'http://10.2.6.131:8000/post'
 
 # The data you want to send, formatted as a dictionary
 data = {
@@ -10,7 +10,7 @@ data = {
 }
 
 # Making the POST request
-response = requests.post(url, json=data)
+response = requests.get(url, json=data)
 
 # Checking if the request was successful
 if response.status_code == 200:
@@ -19,4 +19,4 @@ if response.status_code == 200:
 else:
     print('Failed to make the request.')
     print(f'Status code: {response.status_code}')
-    print(response.text)  # Print any error messages or details provided by the server
+    # print(response.text)  # Print any error messages or details provided by the server
