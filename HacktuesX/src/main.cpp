@@ -2,6 +2,13 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
+const int trigPin = 12;
+const int echoPin = 14;
+
+#define SOUND_VELOCITY 0.034
+long duration, distance;
+int counter = 0;
+
 const char WIFI_SSID[] = "Nokia 6.1";
 const char WIFI_PASSWORD[] = "ivo123456"; 
 
@@ -11,7 +18,8 @@ String queryString = "temperature=26&humidity=70";
 
 void setup() {
   Serial.begin(9600);
-
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.println("Connecting");
   while (WiFi.status() != WL_CONNECTED) {
@@ -21,11 +29,20 @@ void setup() {
   Serial.println("");
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
-
-
 }
 
 void loop() {
+
+  //trig a measurement
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+
+  distance = duration * 0.034 / 2;
+
   WiFiClient client;
   HTTPClient http;
 
@@ -46,5 +63,4 @@ void loop() {
     Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
   }
 
- delay(1000);
 }
