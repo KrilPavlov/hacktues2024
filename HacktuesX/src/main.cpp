@@ -1,4 +1,3 @@
-
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
@@ -9,7 +8,11 @@ String HOST_NAME   = "http://192.168.43.10:8000";
 String PATH_NAME   = "/post";
 String queryString = "temperature=26&humidity=70";
 
+
+void displayPeopleCount();
+
 void setup() {
+
   Serial.begin(9600);
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -26,25 +29,27 @@ void setup() {
 }
 
 void loop() {
+
+  
   WiFiClient client;
   HTTPClient http;
 
-  http.begin(client, HOST_NAME + PATH_NAME + "?" + queryString);
-  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  // http.begin(client, HOST_NAME + PATH_NAME + "?" + queryString);
+  // http.addHeader("Content-Type", "application/x-www-form-urlencoded");
   
-  int httpCode = http.GET();
+  // int httpCode = http.GET();
 
-  if (httpCode > 0) {
-
-    if (httpCode == HTTP_CODE_OK) {
-      String payload = http.getString();
-      Serial.println(payload);
-    } else {
-      Serial.printf("[HTTP] POST... code: %d\n", httpCode);
-    }
-  } else {
-    Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
+if (Serial.available() > 0) {
+    // Read data from Arduino
+    String data = Serial.readString();
+    queryString = data;
+    http.begin(client, HOST_NAME + PATH_NAME + "?" + queryString);
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+    http.GET();
+    // Print received data
+    //Serial.println("Received data from Arduino: " + queryString);
   }
+delay(1000);
 
- delay(1000);
 }
