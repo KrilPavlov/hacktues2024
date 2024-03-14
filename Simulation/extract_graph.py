@@ -30,19 +30,14 @@ for i,contour in enumerate(contours):
         cv2.drawContours(img, [contour], -1, (0, 255, 0), 2)
         cv2.circle(img, (cX, cY), 7, (255, 255, 255), -1)
 
-        # Use pytesseract to do OCR on the centroids
-        # We need to expand the area for OCR to work better
         x, y, w, h = cv2.boundingRect(contour)
         roi = thresh[y - 10:y + h + 10, x - 10:x + w + 10]
-        # text = pytesseract.image_to_string(roi, config='--psm 8 -c tessedit_char_whitelist=0123456789')
         text = str(i)
         node_id = ''.join(filter(str.isdigit, text))
 
         if node_id:
             nodes_positions[int(node_id)] = (cX, cY)
 
-# Since the OCR part can be tricky and might not work perfectly in this automated environment,
-# normally we would check the outputs and adjust parameters or preprocessing steps as needed.
 
 # We create a graph using NetworkX and add nodes with their positions
 G = nx.Graph()
@@ -69,8 +64,6 @@ positions = np.array(list(node_positions.values()))
 # eps is the maximum distance between two samples for them to be considered as in the same neighborhood
 # min_samples is the number of samples in a neighborhood for a point to be considered as a core point
 db = DBSCAN(eps=10, min_samples=1).fit(positions)
-
-# Labels will give you the cluster id for each point
 labels = db.labels_
 
 # Create a new dictionary with one point per cluster
@@ -113,16 +106,11 @@ cv2.destroyAllWindows()
 
 
 import csv
-csv_file = "node_positions.csv"
-
-# Open the file and write the dictionary content
+csv_file = "data/node_positions.csv"
 with open(csv_file, mode='w', newline='') as file:
     writer = csv.writer(file)
-    
-    # Write the header
     writer.writerow(['Node ID', 'X Position', 'Y Position'])
     
-    # Write the node positions
     for node_id, position in node_positions.items():
         writer.writerow([node_id, position[0], position[1]])
 
