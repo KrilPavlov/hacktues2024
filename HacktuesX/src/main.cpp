@@ -1,72 +1,50 @@
+
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
+#include <ESP8266HTTPClient.h>
 
-// Replace with your own WiFi network credentials
-const char* ssid = "p9";
-const char* password = "1208c6831cae";
+const char WIFI_SSID[] = "Nokia 6.1";
+const char WIFI_PASSWORD[] = "ivo123456"; 
 
-// Replace with the URL of the server you want to send the POST request to
-const char* host = "192.168.206.240";
-const int httpPort = 80;
+String HOST_NAME   = "http://192.168.43.10:8000"; 
+String PATH_NAME   = "/post";
+String queryString = "temperature=26&humidity=70";
 
 void setup() {
-  // Start the serial communication for debugging
-  Serial.begin(115200);
+  Serial.begin(9600);
 
-  // Connect to the WiFi network
-  WiFi.begin(ssid, password);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.println("Connecting");
   while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
+    delay(500);
+    Serial.print(".");
   }
-  Serial.println("Connected to WiFi");
+  Serial.println("");
+  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.println(WiFi.localIP());
+
+
 }
 
 void loop() {
-  // Create a client object to handle the connection
   WiFiClient client;
+  HTTPClient http;
 
-  // Connect to the server
-  if (!client.connect(host, httpPort)) {
-    Serial.println("Connection to server failed");
-    return;
+  http.begin(client, HOST_NAME + PATH_NAME + "?" + queryString);
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  
+  int httpCode = http.GET();
+
+  if (httpCode > 0) {
+
+    if (httpCode == HTTP_CODE_OK) {
+      String payload = http.getString();
+      Serial.println(payload);
+    } else {
+      Serial.printf("[HTTP] POST... code: %d\n", httpCode);
+    }
+  } else {
+    Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
   }
 
-  // Define the URL and the payload of the POST request
-  String url = "/path";
-  String payload = "{\"key1\":\"value1\",\"key2\":\"value2\"}";
-
-  // Debugging output
-  Serial.print("Sending POST request to ");
-  Serial.println(host);
-
-  // Send the POST request
-  client.print("POST " + url + " HTTP/1.1\r\n" +
-               "Host: " + host + "\r\n" +
-               "Content-Type: application/json\r\n" +
-               "Content-Length: " + payload.length() + "\r\n" +
-               "Connection: close\r\n\r\n" +
-               payload);
-
-
-//api_key=api&sensor_name=name&temperature=value1&humidity=value2&pressure=value3
-//Content-Type: application/x-www-form-urlencoded
-
-  // Debugging output: display the response from the server
-  Serial.println("Response:");
-  while(client.available()){
-    String line = client.readStringUntil('\r');
-    Serial.print(line);
-  }
-  Serial.println();
-
-  // Close the connection
-  client.stop();
-
-  // Wait for 5 seconds before sending another POST request
-  delay(5000);
+ delay(1000);
 }
-
-
-
-
