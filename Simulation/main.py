@@ -83,7 +83,7 @@ cv2.resizeWindow('Graph on Map', 600, 600)  # Set the window size
 
 
 num_tourists = 5
-start_nodes = [24,23,21,16,0,10]
+start_nodes = [24,23,21,16,10]
 tourists = []
 for i in range(num_tourists):
     start_id = random.choice(start_nodes)

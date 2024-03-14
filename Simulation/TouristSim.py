@@ -27,8 +27,7 @@ class Tourist():
         x2, y2 = self.cur_pos
         x3, y3 = self.end_pos
     
-        # Calculate the distance between P1 and P2
-        D = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        D = math.sqrt((x3 - x2)**2 + (y3 - y2)**2)
         
         # Calculate total travel time from P1 to P2
         T = D / self.speed
