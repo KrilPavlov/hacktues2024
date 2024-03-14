@@ -98,7 +98,7 @@ while True:
 
 
     for tourist in tourists:
-        tourist.updatePosition(0.1)
+        tourist.updatePosition(5)
         if tourist.progress >=1:
             tourist.newRoute()
         draw_tourist_on_image(frame, tourist.cur_pos, "data/tourist.png", scale = 0.1)
