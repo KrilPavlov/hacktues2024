@@ -98,14 +98,14 @@ while True:
 
 
     for tourist in tourists:
-        tourist.updatePosition(5)
+        tourist.updatePosition(0.1)
         if tourist.progress >=1:
             tourist.newRoute()
         draw_tourist_on_image(frame, tourist.cur_pos, "data/tourist.png", scale = 0.1)
         
 
     cv2.imshow('Graph on Map', frame)
-    time.sleep(0.1)
+    time.sleep(1)
     # Break loop with ESC key
     if cv2.waitKey(1) & 0xFF == 27:
         break
