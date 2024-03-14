@@ -39,10 +39,16 @@ if (Serial.available() > 0) {
   queryString = data;
   WiFiClient client;
   HTTPClient http;
-  http.begin(client, HOST_NAME + PATH_NAME + "?" + queryString);
+  
+  //For Get Request
+  //http.begin(client, HOST_NAME + PATH_NAME + "?" + queryString);
+  //http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  //int httpCode = http.GET();
+  http.begin(client, HOST_NAME + PATH_NAME);
   http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-    
-  int httpCode = http.GET();
+
+  int httpCode = http.POST(queryString);
+
   if (httpCode > 0) {
 
     if (httpCode == HTTP_CODE_OK) {
