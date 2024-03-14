@@ -45,13 +45,6 @@ void loop() {
     float distanceDiff = finalDistance - initialDistance; // Distance difference in cm
     float speed = abs(distanceDiff) / timeDiff; // Speed in cm/s
     String direction = distanceDiff < 0 ? "True" : "False";
-
-    // Output the findings
-    //Serial.print("Person Counted. Speed: ");
-    //Serial.print(speed);
-    //Serial.print(" cm/s, Direction: ");
-    //Serial.println(direction);
-    
     peopleCount++; // Increment people count
     String querystring;
     querystring.concat("speed=");
