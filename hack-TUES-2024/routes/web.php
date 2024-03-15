@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('admin.analyze');
+    return view('map2');
 })->name('welcome');
 
 Route::prefix('admin')->name('admin.')->group(function () {
