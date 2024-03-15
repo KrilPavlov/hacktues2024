@@ -8,18 +8,27 @@ MIN_SPEED = 1.5
 class Tourist():
 
     def newRoute(self):
+        old_start_node = self.start_node
         self.start_node = self.end_node
 
         edges = self.adj[self.start_node]
         # Find indices of non-zero elements, which represent node IDs to which the given node is connected
         adjacent_nodes = np.where(edges > 0)[0]
-        self.end_node = random.choice(adjacent_nodes)
+        if len(adjacent_nodes) > 1:
+            filtered_nodes = [node for node in adjacent_nodes if node != old_start_node]
+            self.end_node = random.choice(filtered_nodes)
+        else:
+            self.end_node = random.choice(adjacent_nodes)
+
+
 
         self.speed = random.uniform(MIN_SPEED, MAX_SPEED)
         self.progress = 0
         self.start_pos = self.node_pos[self.start_node]
         self.cur_pos = self.node_pos[self.start_node]
         self.end_pos = self.node_pos[self.end_node]
+        
+        self.detected = False
 
     def updatePosition(self, deltaTime):
         # Extract start, current, and end positions
@@ -73,4 +82,6 @@ class Tourist():
         self.start_pos = self.node_pos[self.start_node]
         self.cur_pos = self.node_pos[self.start_node]
         self.end_pos = self.node_pos[self.end_node]
+
+        self.detected = False
 
