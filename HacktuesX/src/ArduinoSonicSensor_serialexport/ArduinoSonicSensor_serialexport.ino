@@ -12,6 +12,7 @@ void setup() {
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   Serial.begin(9600);
+  Serial.println("Started");
 }
 
 void loop() {
@@ -23,7 +24,7 @@ void loop() {
   duration = pulseIn(echoPin, HIGH);
   distance = (duration*.0343)/2;
 
-  if(distance <= 500 && distance >= 10){
+  if(distance <= 250 && distance >= 10){
     //Serial.println(distance);
     if (!isTracking) {
       // Start tracking a new event
@@ -44,7 +45,7 @@ void loop() {
     float timeDiff = (finalTime - initialTime) / 1000.0; // Time difference in seconds
     float distanceDiff = finalDistance - initialDistance; // Distance difference in cm
     float speed = abs(distanceDiff) / timeDiff; // Speed in cm/s
-    String direction = distanceDiff < 0 ? "True" : "False";
+    String direction = distanceDiff < 0 ? "1" : "0";
     peopleCount++; // Increment people count
     String querystring;
     querystring.concat("speed=");
