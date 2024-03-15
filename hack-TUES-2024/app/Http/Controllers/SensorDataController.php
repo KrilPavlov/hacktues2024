@@ -21,9 +21,9 @@ class SensorDataController extends Controller
 
 
         if (Demo1::all()->count()) {
-            $last_data_0 = Demo1::where('sector_id', 0)->latest()->population;
-            $last_data_1 = Demo1::where('sector_id', 1)->latest()->population;
-            $event = Demo1::latest()->event_id;
+            $last_data_0 = Demo1::where('sector_id', 0)->latest()->first()->population;
+            $last_data_1 = Demo1::where('sector_id', 1)->latest()->first()->population;
+            $event = Demo1::latest()->first()->event_id;
         }
         if ($data['direction'] == 'True') {
             if ($last_data_0 > 0) {
