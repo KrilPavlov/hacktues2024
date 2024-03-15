@@ -27,16 +27,15 @@
                     console.log(response);
                     // Преобразувайте получените данни във формат, който е необходим за графиката
                     var data = new google.visualization.DataTable();
-                    data.addColumn('number', 'Дни');
-                    data.addColumn('number', 'Guardians of the Galaxy');
-                    data.addColumn('number', 'The Avengers');
+                    data.addColumn('number', 'Event ID');
+                    data.addColumn('number', 'Сектор 1');
+                    data.addColumn('number', 'Сектор 2');
                     data.addRows(response);
 
                     // Визуализирайте графиката с новите данни
                     var options = {
                         chart: {
-                            title: 'Box Office Earnings in First Two Weeks of Opening',
-                            subtitle: 'in millions of dollars (USD)'
+                            title: 'Популация на туристите в двата сектора.'
                         },
                         colors: ['#6e4ff5', '#f6aa33', '#fe3995']
                     };
