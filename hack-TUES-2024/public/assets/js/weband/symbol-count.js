@@ -1,0 +1,1 @@
+$(document).ready((function(){$(".count-symbols").keyup((function(){$(this).next(".form-text").length?$(this).next(".form-text").text($(this).val().length):$(this).after('<div class="form-text">'+$(this).val().length+"</div>")}))}));

@@ -1,0 +1,1 @@
+$(document).ready((function(){function r(r){"category"==r?$("#category-wrapper").show():$("#category-wrapper").hide(),"custom"==r?$("#custom-wrapper").show():$("#custom-wrapper").hide(),"brand"==r?$("#brand-wrapper").show():$("#brand-wrapper").hide()}r($("#type").val()),$("#type").change((function(e){r(this.value)}))}));

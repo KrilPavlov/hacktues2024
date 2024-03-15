@@ -1,0 +1,1 @@
+$.ajaxSetup({headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")}}),$(document).ready((function(){$("#products").select2({ajax:{type:"POST",delay:250,processResults:function(e){return{results:e.data}}}})}));
