@@ -11,6 +11,8 @@ from collections import deque
 from TouristSim import Tourist
 from SensorSim import Sensor
 
+LOAD_SENSORS = True
+
 # Load node positions and adjacency matrix
 node_positions_df = pd.read_csv('data/node_positions.csv')
 node_positions = node_positions_df.set_index('Node ID').T.to_dict('list')
@@ -133,40 +135,58 @@ def simulation(q):
 
     #INITIALIZE SENSORS
     sim_id = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
-    num_sensors = 25
-    sensors = []
-    used_segments = set()  # Set to keep track of segments already with a sensor
-    sensor_id=0
+    if LOAD_SENSORS!=True:
+        num_sensors = 25
+        sensors = []
+        used_segments = set()  # Set to keep track of segments already with a sensor
+        sensor_id=0
 
-    while len(sensors) < num_sensors:
-        start_node = random.randint(0, len(adjacency_matrix) - 1)
-        adjacent_nodes = [index for index, value in enumerate(adjacency_matrix[start_node]) if value != 0]
-        
-        if not adjacent_nodes:
-            continue  # Skip to the next iteration if there are no adjacent nodes
-        
-        # Filter adjacent nodes to exclude those leading to segments already used
-        valid_adjacent_nodes = [node for node in adjacent_nodes if (start_node, node) not in used_segments and (node, start_node) not in used_segments]
-        
-        if not valid_adjacent_nodes:
-            continue  # Skip to the next iteration if there are no valid segments left
-        
-        end_node = random.choice(valid_adjacent_nodes)
-        sensors.append(Sensor(start_node, end_node, node_positions, adjacency_matrix, sim_id, sensor_id))
-        used_segments.add((start_node, end_node))
-        used_segments.add((end_node, start_node))  # Add this if your graph is undirected to avoid reverse duplicates
-        sensor_id+=1
+        while len(sensors) < num_sensors:
+            start_node = random.randint(0, len(adjacency_matrix) - 1)
+            adjacent_nodes = [index for index, value in enumerate(adjacency_matrix[start_node]) if value != 0]
+            
+            if not adjacent_nodes:
+                continue  # Skip to the next iteration if there are no adjacent nodes
+            
+            # Filter adjacent nodes to exclude those leading to segments already used
+            valid_adjacent_nodes = [node for node in adjacent_nodes if (start_node, node) not in used_segments and (node, start_node) not in used_segments]
+            
+            if not valid_adjacent_nodes:
+                continue  # Skip to the next iteration if there are no valid segments left
+            
+            end_node = random.choice(valid_adjacent_nodes)
+            sensors.append(Sensor(start_node, end_node, node_positions, adjacency_matrix, sim_id, sensor_id))
+            used_segments.add((start_node, end_node))
+            used_segments.add((end_node, start_node))  # Add this if your graph is undirected to avoid reverse duplicates
+            sensor_id+=1
 
-    sensor_data = [{
-    "sensor_id": sensor.sensor_id,
-    "start_node": sensor.start_node,
-    "end_node": sensor.end_node,
-    "position_x": sensor.pos[0],
-    "position_y": sensor.pos[1]
-    } for sensor in sensors]
-    df_sensors = pd.DataFrame(sensor_data)
-    csv_file_path = 'data/sensors.csv'
-    df_sensors.to_csv(csv_file_path, index=False)
+        sensor_data = [{
+        "sensor_id": sensor.sensor_id,
+        "start_node": sensor.start_node,
+        "end_node": sensor.end_node,
+        "position_x": sensor.pos[0],
+        "position_y": sensor.pos[1]
+        } for sensor in sensors]
+        df_sensors = pd.DataFrame(sensor_data)
+        csv_file_path = 'data/sensors.csv'
+        df_sensors.to_csv(csv_file_path, index=False)
+    else:
+        print("Loading sensor locations")
+        # Load the sensors from the CSV file
+        csv_file_path = 'data/sensors.csv'
+        df_sensors = pd.read_csv(csv_file_path)
+
+        # If you need to recreate Sensor objects from the loaded data
+        sensors = []
+        for _, row in df_sensors.iterrows():
+            sensor_id = int(row['sensor_id'])
+            start_node = int(row['start_node'])
+            end_node = int(row['end_node'])
+            position = (row['position_x'], row['position_y'])
+            # Assuming Sensor class initialization looks something like this
+            # Adjust the arguments based on the actual Sensor class definition
+            sensor = Sensor(start_node, end_node, node_positions, adjacency_matrix, sim_id, sensor_id, position=position)
+            sensors.append(sensor)
 
 
 
@@ -174,7 +194,7 @@ def simulation(q):
     paused = False
     deltaTime = 10
     timestamp = 0
-    loopDelay= 2
+    loopDelay= 1
     while True:
 
         if q:  # Check if the queue has any commands

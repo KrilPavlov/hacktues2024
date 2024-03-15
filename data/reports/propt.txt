@@ -1,0 +1,17 @@
+Can you analyze the provided images and complete the following data fields:
+
+Start date: 
+End date:
+Danger Level on bellow treeline:
+Danger Level on treeline:
+Danger Level in alpine layer:
+Wind slab danger (if any) bellow treeline: {provide word direction abbreviations (e.g. N, W, E, S, NW, NE, SW, etc.)}
+Wind slab danger (if any) on treeline: {provide word direction abbreviations (e.g. N, W, E, S, NW, NE, SW, etc.)}
+Wind slab danger (if any) in alpine layer: {provide word direction abbreviations (e.g. N, W, E, S, NW, NE, SW, etc.)}
+Cronicle fall danger (if any) bellow treeline: {provide word direction abbreviations (e.g. N, W, E, S, NW, NE, SW, etc.)}
+Cronicle fall danger (if any) on treeline: {provide word direction abbreviations (e.g. N, W, E, S, NW, NE, SW, etc.)}
+Cronicle fall danger (if any) in alpine layer: {provide word direction abbreviations (e.g. N, W, E, S, NW, NE, SW, etc.)}
+
+
+
+please formulate the results in a json format. Use your vision skills to interpret the images. Do not try to write a python script that implemets OCR. directly provide the json object. do not write anything else in the message.

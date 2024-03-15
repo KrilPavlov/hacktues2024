@@ -24,7 +24,7 @@ class Sensor():
         # Send POST request with FORM data using the data parameter
         response = requests.post(data)
         # Print the response
-        print(response.text)
+        # print(response.text)
         
         pass
 
@@ -42,19 +42,30 @@ class Sensor():
 
 
 
-    def __init__ (self, start_node, end_node, node_pos, adj, sim_id, sensor_id):
+    def __init__ (self, start_node, end_node, node_pos, adj, sim_id, sensor_id, position = None):
 
-        self.start_node = start_node
-        self.end_node = end_node
-        self.node_pos = node_pos
-        self.adj = adj
-        self.sim_id = sim_id
-        self.sensor_id = sensor_id
+        if position == None:
+            self.start_node = start_node
+            self.end_node = end_node
+            self.node_pos = node_pos
+            self.adj = adj
+            self.sim_id = sim_id
+            self.sensor_id = sensor_id
 
-        start_pos = self.node_pos[self.start_node]
-        end_pos = self.node_pos[self.end_node]
-        start_x, start_y = start_pos
-        end_x, end_y = end_pos
-        self.t = random.random()
-        self.pos = (start_x + (end_x - start_x) * self.t, start_y + (end_y - start_y) * self.t)
+            start_pos = self.node_pos[self.start_node]
+            end_pos = self.node_pos[self.end_node]
+            start_x, start_y = start_pos
+            end_x, end_y = end_pos
+            self.t = random.random()
+            self.pos = (start_x + (end_x - start_x) * self.t, start_y + (end_y - start_y) * self.t)
+
+        else:
+            self.start_node = start_node
+            self.end_node = end_node
+            self.node_pos = node_pos
+            self.adj = adj
+            self.sim_id = sim_id
+            self.sensor_id = sensor_id
+            self.t = random.random()
+            self.pos = position
 
