@@ -12,20 +12,20 @@ class AnalyzeController extends Controller
 {
     public function index()
     {
-        $currentDateTime = Carbon::now();
-        $weekAgoDateTime = $currentDateTime->subDays(7);
+        // $currentDateTime = Carbon::now();
+        // $weekAgoDateTime = $currentDateTime->subDays(7);
 
-        $events = Demo1::where('created_at', '>=', $weekAgoDateTime)->get()->groupBy('event_id');
-        $result_array = [];
-        foreach ($events as $event) {
-            $arr = [];
-            array_push($arr, $event->first()->event_id);
-            foreach ($event as $sector) {
-                array_push($arr, $sector->population);
-            }
-            array_push($result_array, $arr);
-        }
-        return view('admin.analyze', ['result_json' => json_encode($result_array)]);
+        // $events = Demo1::where('created_at', '>=', $weekAgoDateTime)->get()->groupBy('event_id');
+        // $result_array = [];
+        // foreach ($events as $event) {
+        //     $arr = [];
+        //     array_push($arr, $event->first()->event_id);
+        //     foreach ($event as $sector) {
+        //         array_push($arr, $sector->population);
+        //     }
+        //     array_push($result_array, $arr);
+        // }
+        return view('admin.analyze');
     }
 
     public function getMap()
@@ -39,14 +39,17 @@ class AnalyzeController extends Controller
         $weekAgoDateTime = $currentDateTime->subDays(7);
 
         $events = Demo1::where('created_at', '>=', $weekAgoDateTime)->get()->groupBy('event_id');
-        $result_array = [];
-        foreach ($events as $event) {
-            $arr = [];
-            Log:info(serialize($result_array));
-            foreach ($event as $sector) {
-                array_push($arr, $sector->population);
+        if($events){
+            $result_array = [];
+            foreach ($events as $event) {
+                $arr = [];
+                array_push($arr, $event->first()->event_id);
+                foreach ($event as $sector) {
+                    array_push($arr, $sector->population);
+                }
+                array_push($result_array, $arr);
             }
-            array_push($result_array, $arr);
+            return response()->json($result_array);
         }
     }
 }
