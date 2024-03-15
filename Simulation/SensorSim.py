@@ -8,25 +8,12 @@ class Sensor():
 
 
     def post(self, dir, speed, timestamp):
-        #DA SE POSTVA V TABLICATA ZA SIMULACII
-        #self.sensor_id; self.sim_id; timestamp; dir; speed; grpupSize = 1;
-
-
-        
-
-        ds = "ARRIVING" if dir else "LEAVING"
-        #print(f"------SENSOR {self.sensor_id} DETECTED AT {timestamp}: 1 TOURIST {ds} AT {speed} KM/H.") 
-        url = 'http://192.168.43.10:8000/post'
-        # data = furl + '?sensorID=' + self.sensor_id + 'Detected AT' + timestamp + '1 TOURIST' +  ds + 'AT' + speed + 'KM/h'
-        
-        data = f"{url}?sensorID={self.sensor_id}&DetectedAT={timestamp}&1Tourist={ds}&AT={round(Decimal(speed), 2)}KM/H"
+        url = 'http://192.168.43.240:8000/sim'
+        data = {'sim_id':self.sim_id,'sensorID': self.sensor_id,'DetectedAT':timestamp,'Direction':dir, 'speed':round(speed, 2)}
         print(data)
-        # Send POST request with FORM data using the data parameter
-        response = requests.post(data)
-        # Print the response
-        # print(response.text)
-        
-        pass
+        response = requests.post(url, data=data)
+        print(response)
+    pass
 
     def detect(self, tourists, timestamp, range = 20):
 
