@@ -55,7 +55,7 @@
         });
 
         // Обновяване на данните на всеки 5 минути
-        setInterval(fetchDataAndRedrawChart, 300000); // 300000 милисекунди = 5 минути
+        setInterval(fetchDataAndRedrawChart, 3000); // 300000 милисекунди = 5 минути
     });
 </script>
 @endpush
