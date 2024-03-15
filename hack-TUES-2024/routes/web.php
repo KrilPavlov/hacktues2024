@@ -17,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
-Route::get('/post', [SensorDataController::class, 'index'])->name('home');
+Route::post('/post', [SensorDataController::class, 'index'])->name('post');
 Route::get('/get', [SensorDataController::class, 'show'])->name('show');
