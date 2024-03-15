@@ -17,7 +17,7 @@ class SensorDataController extends Controller
 
         $last_data_0 = 0;
         $last_data_1 = 0;
-        $event = 1;
+        $event = 0;
 
 
         if (Demo1::all()->count()) {
@@ -25,14 +25,13 @@ class SensorDataController extends Controller
             $last_data_1 = Demo1::where('sector_id', 1)->latest()->first()->population;
             $event = Demo1::latest()->first()->event_id;
         }
+        ++$event;
         if ($data['direction'] == 'True') {
             if ($last_data_0 > 0) {
                 --$last_data_0;
                 ++$last_data_1;
-                ++$event;
             } else {
                 ++$last_data_1;
-                ++$event;
             }
             $new_event = new Demo1;
             $new_event->event_id = $event;
@@ -49,10 +48,8 @@ class SensorDataController extends Controller
             if ($last_data_1 > 0) {
                 ++$last_data_0;
                 --$last_data_1;
-                ++$event;
             } else {
                 ++$last_data_0;
-                ++$event;
             }
             $new_event = new Demo1;
             $new_event->event_id = $event;
