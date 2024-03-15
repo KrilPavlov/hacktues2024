@@ -12,7 +12,9 @@ class SensorDataController extends Controller
 {
     public function index(Request $request)
     {
-        Log::info($request->all());
+        // Log:info($request->all());
+        $data = $request->all();
+        if(isset($data['direction'])){
         $sensore = new SensorData;
         $data = $request->all();
 
@@ -22,12 +24,26 @@ class SensorDataController extends Controller
 
 
         if (Demo1::all()->count()) {
-            $last_data_0 = Demo1::where('sector_id', 0)->latest()->first()->population;
-            $last_data_1 = Demo1::where('sector_id', 1)->latest()->first()->population;
-            $event = Demo1::latest()->first()->event_id;
+            // Fetching the latest population for sector_id 0
+            $last_data_0 = Demo1::where('sector_id', 0)
+            ->orderBy('id', 'desc') 
+            ->first()
+            ->population;
+
+            // Fetching the latest population for sector_id 1
+            $last_data_1 = Demo1::where('sector_id', 1)
+            ->orderBy('id', 'desc') // Replace 'created_at' with your actual date column if different
+            ->first()
+            ->population;
+
+            // Fetching the latest event_id
+            $event = Demo1::orderBy('id', 'desc') // Again, assuming 'created_at' is the date column
+            ->first()
+            ->event_id;
         }
         ++$event;
-        if ($data['direction'] == 1) {
+        
+        if ($data['direction'] == '1') {
             if ($last_data_0 > 0) {
                 --$last_data_0;
                 ++$last_data_1;
@@ -71,17 +87,12 @@ class SensorDataController extends Controller
             $sensore->speed = $data['speed'];
             $sensore->direction = $data['direction'];
             $sensore->save();
-            Log::info($request->all());
         }
         return $request->all();
     }
-
-
-
-    
+    }
     public function postSim(Request $request)
     {
-        Log::info($request->all());
         $data = $request->all();
         $sensor = new SensorDataSim;
         $sensor->sensor_id = $data['sensorID'];
