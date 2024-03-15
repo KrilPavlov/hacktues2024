@@ -12,6 +12,9 @@ class SensorDataController extends Controller
 {
     public function index(Request $request)
     {
+        // Log:info($request->all());
+        $data = $request->all();
+        if(isset($data['direction'])){
         $sensore = new SensorData;
         $data = $request->all();
 
@@ -26,7 +29,8 @@ class SensorDataController extends Controller
             $event = Demo1::latest()->first()->event_id;
         }
         ++$event;
-        if ($data['direction'] == 'True') {
+        
+        if ($data['direction'] == '1') {
             if ($last_data_0 > 0) {
                 --$last_data_0;
                 ++$last_data_1;
@@ -70,13 +74,12 @@ class SensorDataController extends Controller
             $sensore->speed = $data['speed'];
             $sensore->direction = $data['direction'];
             $sensore->save();
-            Log::info($request->all());
         }
         return $request->all();
     }
+    }
     public function postSim(Request $request)
     {
-        Log::info($request->all());
         $data = $request->all();
         $sensor = new SensorDataSim;
         $sensor->sensor_id = $data['sensorID'];

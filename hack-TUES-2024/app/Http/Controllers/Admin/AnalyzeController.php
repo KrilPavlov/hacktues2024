@@ -42,6 +42,7 @@ class AnalyzeController extends Controller
         $result_array = [];
         foreach ($events as $event) {
             $arr = [];
+            Log:info(serialize($result_array));
             foreach ($event as $sector) {
                 array_push($arr, $sector->population);
             }
