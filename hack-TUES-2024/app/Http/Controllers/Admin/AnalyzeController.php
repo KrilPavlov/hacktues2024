@@ -49,6 +49,7 @@ class AnalyzeController extends Controller
                 }
                 array_push($result_array, $arr);
             }
+            
             return response()->json($result_array);
         }
     }

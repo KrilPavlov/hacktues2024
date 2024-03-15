@@ -24,6 +24,7 @@
                 url: ajaxUrl,
                 type: 'GET',
                 success: function(response) {
+                    console.log(response);
                     // Преобразувайте получените данни във формат, който е необходим за графиката
                     var data = new google.visualization.DataTable();
                     data.addColumn('number', 'Дни');
@@ -55,7 +56,7 @@
         });
 
         // Обновяване на данните на всеки 5 минути
-        setInterval(fetchDataAndRedrawChart, 300000); // 300000 милисекунди = 5 минути
+        setInterval(fetchDataAndRedrawChart, 3000); // 300000 милисекунди = 5 минути
     });
 </script>
 @endpush
