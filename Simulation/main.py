@@ -5,7 +5,11 @@ import cv2
 import matplotlib.pyplot as plt
 import random
 import time
+import string
+import threading
+from collections import deque
 from TouristSim import Tourist
+from SensorSim import Sensor
 
 # Load node positions and adjacency matrix
 node_positions_df = pd.read_csv('data/node_positions.csv')
@@ -44,6 +48,7 @@ def draw_tourist_on_image(image, position, icon_path, scale=1.0):
     - icon_path: Path to the tourist icon image file.
     - scale: Scaling factor for resizing the tourist icon. Default is 1.0 (no scaling).
     """
+    position = (position[0] - 50, position[1] - 50)
     # Load the tourist icon
     icon = cv2.imread(icon_path, cv2.IMREAD_UNCHANGED)
     
@@ -72,42 +77,147 @@ def draw_tourist_on_image(image, position, icon_path, scale=1.0):
     # Put back in the original image
     image[y1:y2, x1:x2] = dst
 
+def overlay_rectangle_on_sensor(image, sensor_pos, sensor_id, rectangle_size=(25, 25), color=(255, 0, 255), thickness=-1, font_scale=0.5):
+    """
+    Overlays a rectangle on the given sensor position on the image and prints the sensor's ID inside it.
 
-# Prepare position mapping
-pos = {node: (x, y) for node, (x, y) in enumerate(node_positions.values())}
-# Create a named window
-cv2.namedWindow('Graph on Map', cv2.WINDOW_NORMAL)  # Create a resizable window
-cv2.resizeWindow('Graph on Map', 600, 600)  # Set the window size
+    Parameters:
+    - image: The image as a numpy array on which to overlay the rectangle.
+    - sensor_pos: The position (x, y) of the sensor on the image.
+    - sensor_id: The ID of the sensor, which will be printed inside the rectangle.
+    - rectangle_size: A tuple (width, height) defining the size of the rectangle. Default is (25, 25).
+    - color: A tuple (B, G, R) defining the color of the rectangle. Default is magenta (255, 0, 255).
+    - thickness: The thickness of the rectangle's border. Default is 2. If it is negative, it fills the rectangle.
+    - font_scale: The scale of the font used to print the sensor ID. Default is 0.5.
+    """
+    x, y = sensor_pos
+    top_left = (int(x - rectangle_size[0] / 2), int(y - rectangle_size[1] / 2))
+    bottom_right = (int(x + rectangle_size[0] / 2), int(y + rectangle_size[1] / 2))
+    
+    # Draw the rectangle
+    cv2.rectangle(image, top_left, bottom_right, color, thickness)
+
+    # Calculate the text size to center it
+    text = str(sensor_id)
+    text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, font_scale, 2)[0]
+    text_x = top_left[0] + (rectangle_size[0] - text_size[0]) // 2
+    text_y = top_left[1] + (rectangle_size[1] + text_size[1]) // 2
+    
+    # Overlay the text on the image
+    cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), 2)
+
+def listen_for_commands(q):
+    while True:
+        command = input()  # Wait for input from the terminal
+        q.append(command)  # Add the command to the queue
+
+def simulation(q):
+    global deltaTime, loopDelay
+    # Prepare position mapping
+    pos = {node: (x, y) for node, (x, y) in enumerate(node_positions.values())}
+    # Create a named window
+    cv2.namedWindow('Simulation', cv2.WINDOW_NORMAL)  # Create a resizable window
+    cv2.resizeWindow('Simulation', 800, 800)  # Set the window size
 
 
 
-
-num_tourists = 5
-start_nodes = [24,23,21,16,10]
-tourists = []
-for i in range(num_tourists):
-    start_id = random.choice(start_nodes)
-    tourists.append(Tourist(start_id, adjacency_matrix, node_positions))
-
-
-
-# Display loop
-while True:
-    frame = img.copy()  # Work on a copy of the image
-    draw_graph_on_image(frame, G, pos)
+    #INITIALIZE TOURISTS
+    num_tourists = 5
+    start_nodes = [24,23,21,16,10]
+    tourists = []
+    for i in range(num_tourists):
+        start_id = random.choice(start_nodes)
+        tourists.append(Tourist(start_id, adjacency_matrix, node_positions))
 
 
-    for tourist in tourists:
-        tourist.updatePosition(5)
-        if tourist.progress >=1:
-            tourist.newRoute()
-        draw_tourist_on_image(frame, tourist.cur_pos, "data/tourist.png", scale = 0.1)
+
+    #INITIALIZE SENSORS
+    sim_id = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
+    num_sensors = 25
+    sensors = []
+    used_segments = set()  # Set to keep track of segments already with a sensor
+    sensor_id=0
+
+    while len(sensors) < num_sensors:
+        start_node = random.randint(0, len(adjacency_matrix) - 1)
+        adjacent_nodes = [index for index, value in enumerate(adjacency_matrix[start_node]) if value != 0]
         
+        if not adjacent_nodes:
+            continue  # Skip to the next iteration if there are no adjacent nodes
+        
+        # Filter adjacent nodes to exclude those leading to segments already used
+        valid_adjacent_nodes = [node for node in adjacent_nodes if (start_node, node) not in used_segments and (node, start_node) not in used_segments]
+        
+        if not valid_adjacent_nodes:
+            continue  # Skip to the next iteration if there are no valid segments left
+        
+        end_node = random.choice(valid_adjacent_nodes)
+        sensors.append(Sensor(start_node, end_node, node_positions, adjacency_matrix, sim_id, sensor_id))
+        used_segments.add((start_node, end_node))
+        used_segments.add((end_node, start_node))  # Add this if your graph is undirected to avoid reverse duplicates
+        sensor_id+=1
 
-    cv2.imshow('Graph on Map', frame)
-    time.sleep(0.1)
-    # Break loop with ESC key
-    if cv2.waitKey(1) & 0xFF == 27:
-        break
+    sensor_data = [{
+    "sensor_id": sensor.sensor_id,
+    "start_node": sensor.start_node,
+    "end_node": sensor.end_node,
+    "position_x": sensor.pos[0],
+    "position_y": sensor.pos[1]
+    } for sensor in sensors]
+    df_sensors = pd.DataFrame(sensor_data)
+    csv_file_path = 'data/sensors.csv'
+    df_sensors.to_csv(csv_file_path, index=False)
 
-cv2.destroyAllWindows()
+
+
+    # Simulation loop
+    paused = False
+    deltaTime = 10
+    timestamp = 0
+    loopDelay= 2
+    while True:
+
+        if q:  # Check if the queue has any commands
+            command = q.popleft()  # Get the next command
+            if command.startswith("deltaTime = "):
+                deltaTime = int(command.split("=")[1].strip())
+            elif command.startswith("loopDelay = "):
+                loopDelay = int(command.split("=")[1].strip())
+            elif command == "pause":
+                paused = not paused
+
+
+        if paused:
+            continue  # Skip the rest of the loop if paused
+
+        frame = img.copy()  # Work on a copy of the image
+        draw_graph_on_image(frame, G, pos)
+
+        for sensor in sensors:
+            overlay_rectangle_on_sensor(frame, sensor.pos, sensor.sensor_id)
+            sensor.detect(tourists, timestamp = timestamp)
+
+        for tourist in tourists:
+            tourist.updatePosition(deltaTime)
+            if tourist.progress >=1:
+                tourist.newRoute()
+            draw_tourist_on_image(frame, tourist.cur_pos, "data/tourist.png", scale = 0.1)
+        
+        timestamp +=deltaTime
+
+        cv2.imshow('Simulation', frame)
+        time.sleep(loopDelay)
+        # Break loop with ESC key
+        if cv2.waitKey(1) & 0xFF == 27:
+            break
+
+    cv2.destroyAllWindows()
+
+
+
+if __name__ =="__main__":
+    q = deque()
+    sim_thread = threading.Thread(target=simulation, args=(q,))
+    cmd_thread = threading.Thread(target=listen_for_commands, args=(q,))
+    sim_thread.start()
+    cmd_thread.start()
