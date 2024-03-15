@@ -25,6 +25,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('map', [AnalyzeController::class, 'getMap'])->name('map');
     Route::resource('nodes', AdminNodeController::class);
     Route::post('nodes/datatable', [AdminNodeController::class, 'getDatatable'])->name('nodes.datatable');
+    Route::get('chart-datas', [AnalyzeController::class, 'getAjaxPeopleCount'])->name('getAjax');
 });
 
 Route::post('/post', [SensorDataController::class, 'index'])->name('post');
