@@ -15,7 +15,6 @@ class NodeTypeSeeder extends Seeder
     {
         $node = new NodeType;
         $node->name = 'Хижа';
-        $no
         $node->save();
 
         $node = new NodeType;
