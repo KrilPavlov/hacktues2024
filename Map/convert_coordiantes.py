@@ -1,37 +1,45 @@
 import pandas as pd
+import random
 
-reference_points = [
-    {'pixel_x': 830, 'pixel_y': 450, 'world_lat': 41.818890, 'world_long': 23.473719},  # Reference point 1
-    {'pixel_x': 920, 'pixel_y': 713, 'world_lat': 41.548497, 'world_long': 23.561021}  # Reference point 2
-]
-
-# Calculate scale and offset
-dx = reference_points[1]['pixel_x'] - reference_points[0]['pixel_x']
-dy = reference_points[1]['pixel_y'] - reference_points[0]['pixel_y']
-dlat = reference_points[1]['world_lat'] - reference_points[0]['world_lat']
-dlong = reference_points[1]['world_long'] - reference_points[0]['world_long']
-
-scale_x = dlat / dx
-scale_y = dlong / dy
-offset_x = reference_points[0]['world_lat'] - (scale_x * reference_points[0]['pixel_x'])
-offset_y = reference_points[0]['world_long'] - (scale_y * reference_points[0]['pixel_y'])
-
-# Function to convert pixel coordinates to world coordinates
-def pixel_to_world(pixel_x, pixel_y):
-    world_lat = scale_x * pixel_x + offset_x
-    world_long = scale_y * pixel_y + offset_y
-    return world_lat, world_long
-
-# Load your datasets
+# Load the data from CSV files
 sensors_df = pd.read_csv('data/sensors.csv')
-node_positions_df = pd.read_csv('data/node_positions.csv')
+node_positions_df = pd.read_csv('data/node_positions_converted.csv')
 
-# Apply the conversion
-sensors_df['world_lat'], sensors_df['world_long'] = zip(*sensors_df.apply(lambda row: pixel_to_world(row['position_x'], row['position_y']), axis=1))
-node_positions_df['world_lat'], node_positions_df['world_long'] = zip(*node_positions_df.apply(lambda row: pixel_to_world(row['X Position'], row['Y Position']), axis=1))
+# Convert node_positions_df to a dictionary for faster lookups
+node_pos_dict = node_positions_df.set_index('Node ID')[['world_lat', 'world_long']].to_dict('index')
 
-# Save the converted data
-sensors_df.to_csv('data/sensors_converted.csv', index=False)
-node_positions_df.to_csv('data/node_positions_converted.csv', index=False)
+# Initialize an empty list to store the converted sensor data
+converted_sensors_data = []
 
-print("Conversion completed and files saved.")
+# Iterate over each sensor record
+for _, sensor in sensors_df.iterrows():
+    start_node = sensor['start_node']
+    end_node = sensor['end_node']
+    
+    # Retrieve the world positions for the start and end nodes
+    start_pos = node_pos_dict[start_node]
+    end_pos = node_pos_dict[end_node]
+    
+    # Extract lat and long for both start and end positions
+    start_lat, start_long = start_pos['world_lat'], start_pos['world_long']
+    end_lat, end_long = end_pos['world_lat'], end_pos['world_long']
+    
+    # Calculate the real world position of the sensor
+    t = random.random()
+    sensor_lat = start_lat + (end_lat - start_lat) * t
+    sensor_long = start_long + (end_long - start_long) * t
+    
+    # Append the calculated positions along with the original sensor data to the list
+    converted_sensors_data.append({
+        'sensor_id': int(sensor['sensor_id']),
+        'start_node': int(start_node),
+        'end_node': int(end_node),
+        'world_lat': sensor_lat,
+        'world_long': sensor_long
+    })
+
+# Convert the list to a DataFrame
+converted_sensors_df = pd.DataFrame(converted_sensors_data)
+
+# Save the converted data to a new CSV file
+converted_sensors_df.to_csv('data/sensors_converted.csv', index=False)
