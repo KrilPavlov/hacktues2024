@@ -108,6 +108,39 @@ def overlay_rectangle_on_sensor(image, sensor_pos, sensor_id, rectangle_size=(25
     # Overlay the text on the image
     cv2.putText(image, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), 2)
 
+
+def overlay_grid_on_image(image, grid_size=(6, 6), color=(0, 255, 0), thickness=1, font_scale=0.5):
+    """
+    Overlays a grid on the image and numbers each grid square at the bottom right corner.
+
+    Parameters:
+    - image: The image as a numpy array on which to overlay the grid.
+    - grid_size: A tuple (rows, cols) defining the grid size. Default is 6x6.
+    - color: A tuple (B, G, R) defining the color of the grid lines. Default is green (0, 255, 0).
+    - thickness: The thickness of the grid lines.
+    - font_scale: The scale of the font used to number the grid squares.
+    """
+    img_height, img_width = image.shape[:2]
+    row_height = img_height // grid_size[0]
+    col_width = img_width // grid_size[1]
+
+    # Draw the grid lines
+    for i in range(1, grid_size[0]):
+        cv2.line(image, (0, i * row_height), (img_width, i * row_height), color, thickness)
+    for j in range(1, grid_size[1]):
+        cv2.line(image, (j * col_width, 0), (j * col_width, img_height), color, thickness)
+
+    # Number each grid square at the bottom right corner
+    for i in range(grid_size[0]):
+        for j in range(grid_size[1]):
+            square_number = i * grid_size[1] + j
+            bottom_right_corner = (j * col_width + col_width, i * row_height + row_height)
+            cv2.putText(image, str(square_number), (bottom_right_corner[0] - 20, bottom_right_corner[1] - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 0), 2)
+
+
+
+
 def listen_for_commands(q):
     while True:
         command = input()  # Wait for input from the terminal
@@ -211,6 +244,8 @@ def simulation(q):
             continue  # Skip the rest of the loop if paused
 
         frame = img.copy()  # Work on a copy of the image
+
+        overlay_grid_on_image(frame, grid_size=(6, 6), color=(0, 255, 0), thickness=3, font_scale=0.5)
         draw_graph_on_image(frame, G, pos)
 
         for sensor in sensors:
