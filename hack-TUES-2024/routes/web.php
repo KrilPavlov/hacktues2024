@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AnalyzeController;
 use App\Http\Controllers\SensorDataController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\NodeController as AdminNodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,8 @@ Route::get('/', function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('analyze', [AnalyzeController::class, 'index'])->name('analyze');
     Route::get('map', [AnalyzeController::class, 'getMap'])->name('map');
+    Route::resource('nodes', AdminNodeController::class);
+    Route::post('nodes/datatable', [AdminNodeController::class, 'getDatatable'])->name('nodes.datatable');
 });
 
 Route::post('/post', [SensorDataController::class, 'index'])->name('post');

@@ -4,7 +4,7 @@
     <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:white;">
         <!--begin::Logo-->
         <a href="{{ route('welcome') }}">
-            <img alt="Logo" src="{{ asset('images/maxauto.png') }}" class="h-25px logo" />
+            <h1>Mountain4ALL</h1>
         </a>
         <!--end::Logo-->
         <!--begin::Aside toggler-->
@@ -27,16 +27,14 @@
         <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu" data-kt-scroll-offset="0">
             <!--begin::Menu-->
             <div class="menu menu-column menu-title-white-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true" data-kt-menu-expand="false">
-                <div class="menu-item">
-                    <div class="menu-content pt-0 pb-2">
-                        <span class="menu-section text-uppercase fs-30 ls-1 font-weight-bold" style="font-size: 16px;">Магазин</span>
-                    </div>
-                </div>
                 @component('components.admin.sidebar.link', ['icon' => getSvgIcon('assets/media/icons/duotune/graphs/gra003.svg', 'svg-icon svg-icon-2'), 'route' => route('admin.analyze'), 'active' => request()->is('admin/analyze*')])
                 Анализ на сензори
                 @endcomponent
                 @component('components.admin.sidebar.link', ['icon' => getSvgIcon('assets/media/icons/duotune/graphs/gra003.svg', 'svg-icon svg-icon-2'), 'route' => route('admin.map'), 'active' => request()->is('admin/map*')])
                 Карта
+                @endcomponent
+                @component('components.admin.sidebar.link', ['icon' => getSvgIcon('assets/media/icons/duotune/graphs/gra003.svg', 'svg-icon svg-icon-2'), 'route' => route('admin.nodes.index'), 'active' => request()->is('admin/node*')])
+                Координати 
                 @endcomponent
             </div>
             <div class="menu-item">
