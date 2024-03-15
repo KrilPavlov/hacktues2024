@@ -16,18 +16,36 @@ class AnalyzeController extends Controller
         $weekAgoDateTime = $currentDateTime->subDays(7);
 
         $events = Demo1::where('created_at', '>=', $weekAgoDateTime)->get()->groupBy('event_id');
-        // dd($left);
-        return view('admin.analyze');
+        $result_array = [];
+        foreach ($events as $event) {
+            $arr = [];
+            array_push($arr, $event->first()->event_id);
+            foreach ($event as $sector) {
+                array_push($arr, $sector->population);
+            }
+            array_push($result_array, $arr);
+        }
+        return view('admin.analyze', ['result_json' => json_encode($result_array)]);
     }
 
-    public function getMap(){
+    public function getMap()
+    {
         return view('map');
     }
 
-    public function getAjaxPeopleCount(){
-        $right = SensorData::where('direction', 'True')->count();
-        $left = SensorData::where('direction', 'False')->count();
+    public function getAjaxPeopleCount()
+    {
+        $currentDateTime = Carbon::now();
+        $weekAgoDateTime = $currentDateTime->subDays(7);
 
-        return response()->json(['right' => $right, 'left' => $left]);
+        $events = Demo1::where('created_at', '>=', $weekAgoDateTime)->get()->groupBy('event_id');
+        $result_array = [];
+        foreach ($events as $event) {
+            $arr = [];
+            foreach ($event as $sector) {
+                array_push($arr, $sector->population);
+            }
+            array_push($result_array, $arr);
+        }
     }
 }
