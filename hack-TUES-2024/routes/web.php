@@ -44,7 +44,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 $grid->save();
             }
         }
-        return redirect()->back()->with(['success' => true, 'message' => "Популациите бяха нулирани"]);
+        return redirect()->back()->with(['success' =>'Популациите бяха нулирани']);
 
     })->name('restore.population');
 });
