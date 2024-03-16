@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\NodeController as AdminNodeController;
 use App\Models\GridSquare;
 use App\Models\Node;
+use GrahamCampbell\ResultType\Success;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +44,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 $grid->save();
             }
         }
-        return redirect()->back();
+        return redirect()->back()->with(['success' => true, 'message' => "Популациите бяха нулирани"]);
 
     })->name('restore.population');
 });
