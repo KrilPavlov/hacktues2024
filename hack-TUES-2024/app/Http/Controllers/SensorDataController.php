@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Demo1;
+use App\Models\Sensor;
+use App\Models\Node;
+use App\Models\GridSquare;
 use App\Models\SensorData;
 use App\Models\SensorDataSim;
 use Illuminate\Http\Request;
@@ -93,6 +96,56 @@ class SensorDataController extends Controller
     }
     public function postSim(Request $request)
     {
+
+        $sensor_id = $request['sensorID'];
+        $dir = $request['Direction'];
+        $sensor = Sensor::find($sensor_id);
+        $start_id = 1;
+        $end_id = 1;
+
+        if ($sensor){
+            
+            $start_id = $sensor->start_node;
+            $end_id = $sensor->end_node;
+            $start = Node::find($start_id);
+            $end = Node::find($end_id);
+            Log:info($start_id);
+            if ($start && $end){
+                
+                $old_start_population = $start->population;
+                $old_end_population = $end->population;
+
+                if($dir == 'True'){
+                    $start->population = ($start->population>0) ? $start->population - 1 : 0;
+                    $end->population = $end->population+1;
+                    $start->save();
+                    $end->save();
+                }
+                else{
+                    $start->population = $start->population+1;
+                    $end->population = ($end->population>0) ? $end->population - 1 : 0;
+                    $start->save();
+                    $end->save();
+                }
+
+                $sq_start = $start->sq_Id;
+                $sq_end = $end->sq_Id;
+                $start_square = GridSquare::find($sq_start);
+                $end_square = Node::find($sq_start);
+                if ($start_square && $end_square){
+                    $start_population = $start_square->population-$old_start_population+$start->population;
+                    $end_population = $end_square->population-$old_end_population+$end->population;
+
+                    $start_square->population = ($start_population >0) ? $start_population : 0;
+                    $end_square->population = ($end_population >0) ? $end_population : 0;
+                    $start_square->save();
+                    $end_square->save();
+                }
+            }
+
+        }
+
+
         $data = $request->all();
         $sensor = new SensorDataSim;
         $sensor->sensor_id = $data['sensorID'];

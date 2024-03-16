@@ -8,7 +8,7 @@ class Sensor():
 
 
     def post(self, dir, speed, timestamp):
-        url = 'http://192.168.43.240:8000/sim'
+        url = 'http://127.0.0.1:8000/sim'
         data = {'sim_id':self.sim_id,'sensorID': self.sensor_id,'DetectedAT':timestamp,'Direction':dir, 'speed':round(speed, 2)}
         print(data)
         response = requests.post(url, data=data)

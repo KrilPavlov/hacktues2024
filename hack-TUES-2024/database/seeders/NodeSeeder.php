@@ -18,6 +18,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.7857489619772";
         $node->name = "Пирин";
         $node->type_id = 3;
+        $node->sq_Id = 35;
         $node->save();
 
 
@@ -26,6 +27,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.428085";
         $node->name = "Беговица";
         $node->type_id = 3;
+        $node->sq_Id = 28;
         $node->save();
 
         $node = new Node;
@@ -33,6 +35,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.394216";
         $node->name = "Яне Сандански";
         $node->type_id = 3;
+        $node->sq_Id = 27;
         $node->save();
 
 
@@ -41,6 +44,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.487852";
         $node->name = "Яловарника";
         $node->type_id = 3;
+        $node->sq_Id = 28;
         $node->save();
 
         $node = new Node;
@@ -48,6 +52,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.507271";
         $node->name = "Каменица";
         $node->type_id = 3;
+        $node->sq_Id = 29;
         $node->save();
 
         $node = new Node;
@@ -55,6 +60,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.419411";
         $node->name = "Спано поле";
         $node->type_id = 3;
+        $node->sq_Id = 27;
         $node->save();
 
         $node = new Node;
@@ -62,6 +68,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.46719";
         $node->name = "Тевно езеро";
         $node->type_id = 3;
+        $node->sq_Id = 28;
         $node->save();
 
         $node = new Node;
@@ -69,6 +76,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.459048";
         $node->name = "Превалски чукар";
         $node->type_id = 3;
+        $node->sq_Id = 28;
         $node->save();
 
         $node = new Node;
@@ -76,6 +84,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.4984";
         $node->name = "Дженгал";
         $node->type_id = 3;
+        $node->sq_Id = 29;
         $node->save();
 
         $node = new Node;
@@ -83,6 +92,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.477137";
         $node->name = "Превалски чукар 2";
         $node->type_id = 3;
+        $node->sq_Id = 22;
         $node->save();
 
         $node = new Node;
@@ -90,6 +100,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.291231";
         $node->name = "Синаница";
         $node->type_id = 3;
+        $node->sq_Id = 19;
         $node->save();
 
         $node = new Node;
@@ -97,6 +108,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.357549";
         $node->name = "Спано поле";
         $node->type_id = 3;
+        $node->sq_Id = 19;
         $node->save();
 
         $node = new Node;
@@ -104,13 +116,15 @@ class NodeSeeder extends Seeder
         $node->long = "23.524412";
         $node->name = "Безбог";
         $node->type_id = 3;
+        $node->sq_Id = 23;
         $node->save();
 
         $node = new Node;
         $node->lat = "41.737743";
         $node->long = "23.422821";
-        $node->name = "Бъндерики чукар";
+        $node->name = "Бъндеришки чукар";
         $node->type_id = 3;
+        $node->sq_Id = 21;
         $node->save();
 
         $node = new Node;
@@ -118,6 +132,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.467636";
         $node->name = "Демяница";
         $node->type_id = 3;
+        $node->sq_Id = 22;
         $node->save();
 
         $node = new Node;
@@ -125,6 +140,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.324910";
         $node->name = "Синаница";
         $node->type_id = 3;
+        $node->sq_Id = 20;
         $node->save();
 
         $node = new Node;
@@ -132,6 +148,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.547160";
         $node->name = "Гоце Делчев";
         $node->type_id = 3;
+        $node->sq_Id = 24;
         $node->save();
 
         $node = new Node;
@@ -139,6 +156,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.416513";
         $node->name = "Вихрен";
         $node->type_id = 3;
+        $node->sq_Id = 21;
         $node->save();
 
         $node = new Node;
@@ -146,6 +164,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.424516";
         $node->name = "Бъндерица";
         $node->type_id = 3;
+        $node->sq_Id = 16;
         $node->save();
 
         $node = new Node;
@@ -153,6 +172,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.396938";
         $node->name = "Вихрен";
         $node->type_id = 3;
+        $node->sq_Id = 15;
         $node->save();
 
         $node = new Node;
@@ -160,6 +180,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.370789";
         $node->name = "Байови дупки";
         $node->type_id = 3;
+        $node->sq_Id = 14;
         $node->save();
 
         $node = new Node;
@@ -167,6 +188,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.473719";
         $node->name = "Банско";
         $node->type_id = 3;
+        $node->sq_Id = 10;
         $node->save();
 
         $node = new Node;
@@ -174,6 +196,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.378034";
         $node->name = "Яворов";
         $node->type_id = 3;
+        $node->sq_Id = 9;
         $node->save();
 
         $node = new Node;
@@ -181,6 +204,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.390403";
         $node->name = "Яворов";
         $node->type_id = 3;
+        $node->sq_Id = 9;
         $node->save();
 
         $node = new Node;
@@ -188,6 +212,7 @@ class NodeSeeder extends Seeder
         $node->long = "23.344931";
         $node->name = "Даутов връх";
         $node->type_id = 3;
+        $node->sq_Id = 2;
         $node->save();
     }
 }
