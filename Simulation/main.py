@@ -227,7 +227,7 @@ def simulation(q):
     paused = False
     deltaTime = 10
     timestamp = 0
-    loopDelay= 1
+    loopDelay= 2
     while True:
 
         if q:  # Check if the queue has any commands

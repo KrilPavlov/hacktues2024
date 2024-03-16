@@ -109,7 +109,6 @@ class SensorDataController extends Controller
             $end_id = $sensor->end_node;
             $start = Node::find($start_id);
             $end = Node::find($end_id);
-            Log:info($start_id);
             if ($start && $end){
                 
                 $old_start_population = $start->population;
@@ -133,13 +132,30 @@ class SensorDataController extends Controller
                 $start_square = GridSquare::find($sq_start);
                 $end_square = Node::find($sq_start);
                 if ($start_square && $end_square){
-                    $start_population = $start_square->population-$old_start_population+$start->population;
-                    $end_population = $end_square->population-$old_end_population+$end->population;
+                    // $start_population = $start_square->population-$old_start_population+$start->population;
+                    // $end_population = $end_square->population-$old_end_population+$end->population;
 
-                    $start_square->population = ($start_population >0) ? $start_population : 0;
-                    $end_square->population = ($end_population >0) ? $end_population : 0;
-                    $start_square->save();
-                    $end_square->save();
+                    // $start_square->population = ($start_population >0) ? $start_population : 0;
+                    // $end_square->population = ($end_population >0) ? $end_population : 0;
+                    // $start_square->save();
+                    // $end_square->save();
+                    
+                    for ($i = 1; $i<=36; $i++){
+                        $sum = 0;
+                        $node_arr = Node::where('sq_Id', $i)->get();
+                        
+                        foreach($node_arr as $node){
+                            $sum += $node->population;
+                        }
+                        Log:info($sum);
+                        $square = GridSquare::find($i);
+                        if($square){
+                            $square->population = $sum;
+                            $square->save();
+                        }
+                    }
+
+
                 }
             }
 
