@@ -157,7 +157,7 @@ def simulation(q):
 
 
     #INITIALIZE TOURISTS
-    num_tourists = 5
+    num_tourists = 10
     start_nodes = [24,23,21,16,10]
     tourists = []
     for i in range(num_tourists):

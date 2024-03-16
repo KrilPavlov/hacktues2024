@@ -7,7 +7,7 @@ url = 'http://127.0.0.1:8000/post'
 data = {
     'sensore_id': 'tester',
     'group_size': 1,
-    'direction' : 1,
+    'direction' : '0',
     'speed' : 1.23, 
 }
 
