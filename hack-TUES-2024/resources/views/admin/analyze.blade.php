@@ -5,53 +5,57 @@
 
 
 @section('content')
-<div id="kt_docs_google_chart_column"></div>
+<div id="kt_docs_google_chart_column" data-ajax-url="{{ route('admin.getAjax') }}"></div>
 @endsection
 
 @push('scripts')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-    // GOOGLE CHARTS INIT
-
     google.load('visualization', '1', {
         packages: ['corechart', 'bar', 'line']
     });
 
     google.setOnLoadCallback(function() {
-        // LINE CHART
-        var data = new google.visualization.DataTable();
-        data.addColumn('number', 'Дни');
-        data.addColumn('number', 'Guardians of the Galaxy');
-        data.addColumn('number', 'The Avengers');
-        data.addColumn('number', 'Transformers: Age of Extinction');
+        // Функция за извличане на данни с AJAX и прерисуване на графиката
+        function fetchDataAndRedrawChart() {
+            var ajaxUrl = $('#kt_docs_google_chart_column').data('ajax-url');
 
-        data.addRows([
-            [1, 37.8, 80.8, 41.8],
-            [2, 30.9, 69.5, 32.4],
-            [3, 25.4, 57, 25.7],
-            [4, 11.7, 18.8, 10.5],
-            [5, 11.9, 17.6, 10.4],
-            [6, 8.8, 13.6, 7.7],
-            [7, 7.6, 12.3, 9.6],
-            [8, 12.3, 29.2, 10.6],
-            [9, 16.9, 42.9, 14.8],
-            [10, 12.8, 30.9, 11.6],
-            [11, 5.3, 7.9, 4.7],
-            [12, 6.6, 8.4, 5.2],
-            [13, 4.8, 6.3, 3.6],
-            [14, 4.2, 6.2, 3.4]
-        ]);
+            $.ajax({
+                url: ajaxUrl,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    // Преобразувайте получените данни във формат, който е необходим за графиката
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('number', 'Event ID');
+                    data.addColumn('number', 'Сектор 1');
+                    data.addColumn('number', 'Сектор 2');
+                    data.addRows(response);
 
-        var options = {
-            chart: {
-                title: 'Box Office Earnings in First Two Weeks of Opening',
-                subtitle: 'in millions of dollars (USD)'
-            },
-            colors: ['#6e4ff5', '#f6aa33', '#fe3995']
-        };
+                    // Визуализирайте графиката с новите данни
+                    var options = {
+                        chart: {
+                            title: 'Популация на туристите в двата сектора.'
+                        },
+                        colors: ['#6e4ff5', '#f6aa33', '#fe3995']
+                    };
 
-        var chart = new google.charts.Line(document.getElementById('kt_docs_google_chart_column'));
-        chart.draw(data, options);
+                    var chart = new google.charts.Line(document.getElementById('kt_docs_google_chart_column'));
+                    chart.draw(data, options);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
+
+        // Извикване на функцията за първоначално зареждане на страницата
+        $(document).ready(function() {
+            fetchDataAndRedrawChart();
+        });
+
+        // Обновяване на данните на всеки 5 минути
+        setInterval(fetchDataAndRedrawChart, 3000); // 300000 милисекунди = 5 минути
     });
 </script>
 @endpush

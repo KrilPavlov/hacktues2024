@@ -4,7 +4,7 @@
 const char WIFI_SSID[] = "Nokia 6.1";
 const char WIFI_PASSWORD[] = "ivo123456"; 
 
-String HOST_NAME   = "http://192.168.43.240:8000"; 
+String HOST_NAME   = "http://192.168.43.206:8000"; 
 String PATH_NAME   = "/post";
 String queryString = "testdata1=26&testdata2=70";
 

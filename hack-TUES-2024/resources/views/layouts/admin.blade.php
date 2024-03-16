@@ -93,7 +93,7 @@ License: For each use you must have a valid license purchased only from above li
                         <!--begin::Copyright-->
                         <div class="text-dark order-2 order-md-1">
                             <span class="text-muted fw-bold me-1">2024©</span>
-                            <a href="https://weband.bg" target="_blank" class="text-gray-800 text-hover-primary">DE[DEBUGGERS]</a>
+                            <a href="javascript:;" target="_blank" class="text-gray-800 text-hover-primary">DE[DEBUGGERS]</a>
                         </div>
                         <!--end::Copyright-->
                     </div>

@@ -1,16 +1,18 @@
 import requests
 
 # The URL you want to make a POST request to
-url = 'http://10.2.6.131:8000/post'
+url = 'http://127.0.0.1:8000/post'
 
 # The data you want to send, formatted as a dictionary
 data = {
-    'key': 'value',  # Replace these with the actual data keys and values you need to send
-    'another_key': 'another_value',
+    'sensore_id': 'tester',
+    'group_size': 1,
+    'direction' : 1,
+    'speed' : 1.23, 
 }
 
 # Making the POST request
-response = requests.get(url, json=data)
+response = requests.post(url, json=data)
 
 # Checking if the request was successful
 if response.status_code == 200:
