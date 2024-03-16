@@ -32,7 +32,7 @@ License: For each use you must have a valid license purchased only from above li
     <link rel="SHORTCUT ICON" href="{{ asset('assets/media/logos/favicon.ico') }}">
     <!--end::Global Stylesheets Bundle-->
     <script src={{ asset('assets/tinymce/js/tinymce/tinymce.min.js') }} referrerpolicy="origin"></script>
-
+    @stack('header')
 </head>
 <!--end::Head-->
 <!--begin::Body-->

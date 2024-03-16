@@ -2,12 +2,14 @@
 
 @section('title', 'Анализ на поток от хора')
 @section('header_title', 'Анализ на поток от хора')
-<style>
-    #map {
-        height: 500px;
-        width: 100%;
-    }
-</style>
+
+@section('content')
+<h1>Mountain Rila Data Visualization</h1>
+<div id="map" style="height: 500px; width: 100%;"></div>
+<a href="{{route('admin.restore.population')}}" class="btn btn-primary mt-5">Нулирай</a>
+@endsection
+
+@push('scripts')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx1Wloo61tkRi6Fb7hUxn6-DJtSlJ_mGE&callback=initMap" async defer></script>
 <script>
     function initMap() {
@@ -112,31 +114,4 @@
         }
     }
 </script>
-</head>
-
-<body>
-    <h1>Mountain Rila Data Visualization</h1>
-    <div id="map"></div>
-    <a href="{{route('admin.restore.population')}}" class="btn btn-primary">Нулирай</a>
-</body>
-
-<?php
-// Replace this with your PHP code to connect to a database or data source
-// and fetch data for the zone and data points
-
-// Example zone data (replace with your actual data)
-$zoneData = array(
-    array("lat" => 42.1, "lng" => 23.6),
-    array("lat" => 42.2, "lng" => 23.8),
-    array("lat" => 42.0, "lng" => 23.9),
-    array("lat" => 41.9, "lng" => 23.7),
-    array("lat" => 42.1, "lng" => 23.6)  // Close the polygon
-);
-
-// Example data points (replace with your logic to fetch data)
-$dataPoints = array(
-    array("lat" => 42.12, "lng" => 23.75),
-    array("lat" => 42.08, "lng" => 23.82),
-    array("lat" => 42.15, "lng" => 23.68)
-);
-?>
+@endpush
