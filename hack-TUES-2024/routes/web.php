@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AnalyzeController;
 use App\Http\Controllers\SensorDataController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\NodeController as AdminNodeController;
+use App\Models\GridSquare;
 use App\Models\Node;
 
 /*
@@ -27,7 +28,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('nodes', AdminNodeController::class);
     Route::post('nodes/datatable', [AdminNodeController::class, 'getDatatable'])->name('nodes.datatable');
     Route::get('chart-datas', [AnalyzeController::class, 'getAjaxPeopleCount'])->name('getAjax');
-    Route::post('restore/population', function(){
+    Route::get('restore/population', function(){
         $nodes = Node::all();
         if($nodes->count()){
             foreach($nodes as $node){
@@ -35,6 +36,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 $node->save();
             }
         }
+        $grid_square = GridSquare::all();
+        if($grid_square->count()){
+            foreach($grid_square as $grid){
+                $grid->population = 0;
+                $grid->save();
+            }
+        }
+        return redirect()->back();
 
     })->name('restore.population');
 });
