@@ -68,4 +68,31 @@
             .catch(error => console.error('Error fetching grid square data:', error));
     }
 </script>
-@endsection
+</head>
+
+<body>
+    <h1>Mountain Rila Data Visualization</h1>
+    <div id="map"></div>
+    <a href="{{route('admin.restore.population')}}" class="btn btn-primary">Нулирай популацията</a>
+
+
+    <?php
+    // Replace this with your PHP code to connect to a database or data source
+    // and fetch data for the zone and data points
+
+    // Example zone data (replace with your actual data)
+    $zoneData = array(
+        array("lat" => 42.1, "lng" => 23.6),
+        array("lat" => 42.2, "lng" => 23.8),
+        array("lat" => 42.0, "lng" => 23.9),
+        array("lat" => 41.9, "lng" => 23.7),
+        array("lat" => 42.1, "lng" => 23.6)  // Close the polygon
+    );
+
+    // Example data points (replace with your logic to fetch data)
+    $dataPoints = array(
+        array("lat" => 42.12, "lng" => 23.75),
+        array("lat" => 42.08, "lng" => 23.82),
+        array("lat" => 42.15, "lng" => 23.68)
+    );
+    ?>
