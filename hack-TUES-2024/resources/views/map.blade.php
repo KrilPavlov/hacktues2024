@@ -68,14 +68,6 @@
                 lat: 42.0,
                 lng: 23.9
             },
-            {
-                lat: 41.9,
-                lng: 23.7
-            },
-            {
-                lat: 42.1,
-                lng: 23.6
-            } // Close the polygon
         ];
 
         // Create a red polygon for the zone
