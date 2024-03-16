@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AnalyzeController;
 use App\Http\Controllers\SensorDataController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\NodeController as AdminNodeController;
+use App\Http\Controllers\GridSquareController;
 use App\Models\GridSquare;
 use App\Models\Node;
 use GrahamCampbell\ResultType\Success;
@@ -49,6 +50,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     })->name('restore.population');
 });
 
+Route::get('/get-grid-square-data', [GridSquareController::class, 'getGridSquareData'])->name('getGridSquareData');
 Route::post('/post', [SensorDataController::class, 'index'])->name('post');
 Route::post('/sim', [SensorDataController::class, 'postSim'])->name('post_sim');
 Route::get('/get', [SensorDataController::class, 'show'])->name('show');
