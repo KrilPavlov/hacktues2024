@@ -117,6 +117,8 @@
 <body>
     <h1>Mountain Rila Data Visualization</h1>
     <div id="map"></div>
+    <a href="{{route('admin.restore.population')}}" class="btn btn-primary">Нулирай популацията</a>
+
 
     <?php
     // Replace this with your PHP code to connect to a database or data source

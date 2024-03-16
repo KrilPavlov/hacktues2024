@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AnalyzeController;
 use App\Http\Controllers\SensorDataController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\NodeController as AdminNodeController;
+use App\Models\Node;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('nodes', AdminNodeController::class);
     Route::post('nodes/datatable', [AdminNodeController::class, 'getDatatable'])->name('nodes.datatable');
     Route::get('chart-datas', [AnalyzeController::class, 'getAjaxPeopleCount'])->name('getAjax');
+    Route::post('restore/population', function(){
+        $nodes = Node::all();
+        if($nodes->count()){
+            foreach($nodes as $node){
+                $node->population = 0;
+                $node->save();
+            }
+        }
+
+    })->name('restore.population');
 });
 
 Route::post('/post', [SensorDataController::class, 'index'])->name('post');
